@@ -43,18 +43,24 @@ python main.py
 
 This starts an OpenAI-compatible Responses server on `http://localhost:8088`. Multi-turn memory comes from the Responses protocol itself: each reply includes a response id, and follow-up requests pass it back as `previous_response_id` so the service keeps the conversation's context — there's no local session code to manage.
 
-## Optional: attach an MCP server
+## Optional: attach MCP servers
 
-Set in `.env`:
+Set `MCP_SERVERS` in `.env` to a JSON array — one entry per MCP server:
 
 ```bash
-MCP_ENABLED=true
-MCP_NAME=Microsoft Learn MCP
-MCP_URL=https://learn.microsoft.com/api/mcp
-MCP_APPROVAL_MODE=never_require
+MCP_SERVERS='[
+  {"name": "Microsoft Learn MCP", "url": "https://learn.microsoft.com/api/mcp"},
+  {"name": "GitHub", "url": "https://api.githubcopilot.com/mcp/", "approval_mode": "always_require", "headers": {"Authorization": "Bearer <token>"}}
+]'
 ```
 
-`main.py` registers the MCP server as a hosted/remote tool (`client.get_mcp_tool(...)`) that the agent can call during the conversation. `MCP_APPROVAL_MODE` is `never_require` or `always_require`, controlling whether tool calls need explicit approval before running. Leave `MCP_ENABLED=false` (the default) to run with no MCP tools at all.
+`main.py` registers each entry as a hosted/remote tool (`client.get_mcp_tool(...)`) the agent can call during the conversation. Per server:
+
+- `name` / `url` — required
+- `approval_mode` — `never_require` or `always_require` (defaults to `never_require`)
+- `headers` — optional, e.g. for an `Authorization` bearer token
+
+Leave `MCP_SERVERS` empty/unset to run with no MCP tools at all.
 
 ## Deploy to Azure AI Foundry
 

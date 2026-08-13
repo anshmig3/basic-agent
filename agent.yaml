@@ -10,11 +10,5 @@ resources:
 environment_variables:
   - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
     value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
-  - name: MCP_ENABLED
-    value: ${MCP_ENABLED}
-  - name: MCP_NAME
-    value: ${MCP_NAME}
-  - name: MCP_URL
-    value: ${MCP_URL}
-  - name: MCP_APPROVAL_MODE
-    value: ${MCP_APPROVAL_MODE}
+  - name: MCP_SERVERS
+    value: ${MCP_SERVERS}
